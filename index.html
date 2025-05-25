@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Selamat Ulang Tahun, Silmi!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to top right, #ffd1dc, #fff0f5);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 50px;
+      font-size: 3em;
+      color: #d6336c;
+      animation: fadeIn 2s ease-in-out;
+    }
+    p {
+      font-size: 1.5em;
+      color: #4b2e83;
+      margin: 20px;
+      animation: fadeIn 3s ease-in-out;
+    }
+    button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #ff1493;
+    }
+    #surprise {
+      display: none;
+      font-size: 1.4em;
+      color: #ff1493;
+      margin-top: 30px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+
+  <h1>Selamat Ulang Tahun, Silmi!</h1>
+  <p>Hari ini spesial banget karena kamu lahir ke dunia ini.<br>
+     Aku, Razii, bersyukur banget bisa punya kamu.</p>
+
+  <button onclick="showSurprise()">Klik untuk Kejutan!</button>
+  <div id="surprise">Aku sayang kamu lebih dari apapun. Semoga tahun ini penuh kebahagiaan dan cinta, ya!</div>
+
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/02/14/audio_3b0d5c45c6.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    function showSurprise() {
+      document.getElementById("surprise").style.display = "block";
+      document.getElementById("bgMusic").play();
+      startConfetti();
+    }
+
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let confetti = [];
+
+    function randomColor() {
+      const colors = ['#ff69b4', '#ff1493', '#ffc0cb', '#ffffff'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 150; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 6 + 2,
+          color: randomColor(),
+          speedY: Math.random() * 3 + 1,
+          speedX: Math.random() * 2 - 1
+        });
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+        ctx.fillStyle = c.color;
+        ctx.fill();
+        c.y += c.speedY;
+        c.x += c.speedX;
+
+        if (c.y > canvas.height) {
+          c.y = -10;
+          c.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function startConfetti() {
+      createConfetti();
+      drawConfetti();
+    }
+  </script>
+
+</body>
+</html>
